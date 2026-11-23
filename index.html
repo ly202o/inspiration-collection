@@ -157,7 +157,12 @@
   body.view-large .grid { grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); }
   body.view-large .thumb { height: 160px; font-size: 68px; }
   @media (max-width: 600px) {
-    body.view-compact .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    body.view-compact .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding: 0 8px; }
+    body.view-compact .thumb { height: 40px; font-size: 23px; }
+    body.view-compact .body { padding: 7px; }
+    body.view-compact .body h2 { font-size: 12px; }
+    body.view-compact .actions { margin-top: 6px; }
+    body.view-compact .btn { font-size: 10px; padding: 7px 3px; }
     body.view-standard .grid, body.view-large .grid { grid-template-columns: minmax(0, 1fr); }
     body.view-standard .thumb { height: 95px; font-size: 42px; }
     body.view-standard .body, body.view-large .body { padding: 14px 16px; }
