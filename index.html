@@ -144,6 +144,28 @@
     .btn { font-size: 11px; line-height: 1.4; padding: 8px 4px; }
     footer { padding: 0 12px 24px; font-size: 11px; }
   }
+  .view-switch { display: flex; justify-content: center; gap: 6px; margin: 16px auto 0; }
+  .view-switch button { color: var(--text-dim); background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 7px 12px; font: inherit; font-size: 12px; cursor: pointer; }
+  .view-switch button[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); }
+  body.view-compact .grid { grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 10px; }
+  body.view-compact .thumb { height: 52px; font-size: 28px; }
+  body.view-compact .body { padding: 10px; }
+  body.view-compact .body h2 { font-size: 14px; line-height: 1.35; overflow-wrap: anywhere; }
+  body.view-compact .tags, body.view-compact .desc { display: none; }
+  body.view-compact .actions { margin-top: 9px; }
+  body.view-compact .btn { font-size: 11px; line-height: 1.4; padding: 8px 4px; }
+  body.view-large .grid { grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); }
+  body.view-large .thumb { height: 160px; font-size: 68px; }
+  @media (max-width: 600px) {
+    body.view-compact .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    body.view-standard .grid, body.view-large .grid { grid-template-columns: minmax(0, 1fr); }
+    body.view-standard .thumb { height: 95px; font-size: 42px; }
+    body.view-standard .body, body.view-large .body { padding: 14px 16px; }
+    body.view-standard .body h2, body.view-large .body h2 { font-size: 17px; }
+    body.view-standard .tags, body.view-standard .desc, body.view-large .tags, body.view-large .desc { display: flex; }
+    body.view-standard .desc, body.view-large .desc { display: block; }
+    body.view-large .thumb { height: 150px; font-size: 64px; }
+  }
 </style>
 </head>
 <body>
@@ -152,11 +174,24 @@
   <div class="sub">灵感收集箱 · 共 9 个</div>
 </header>
 
+<div class="view-switch" role="group" aria-label="切换显示模式"><button type="button" data-view="compact">紧凑</button><button type="button" data-view="standard">标准</button><button type="button" data-view="large">大图</button></div>
 <div class="grid" id="grid"></div>
 
 <footer>本地项目的在线入口正在整理</footer>
 
 <script>
+const viewButtons = document.querySelectorAll("[data-view]");
+function setView(view) {
+  if (!["compact", "standard", "large"].includes(view)) view = "compact";
+  document.body.classList.remove("view-compact", "view-standard", "view-large");
+  document.body.classList.add(`view-${view}`);
+  viewButtons.forEach(button => button.setAttribute("aria-pressed", String(button.dataset.view === view)));
+  try { localStorage.setItem("collection-view", view); } catch (_) {}
+}
+viewButtons.forEach(button => button.addEventListener("click", () => setView(button.dataset.view)));
+let savedView;
+try { savedView = localStorage.getItem("collection-view"); } catch (_) {}
+setView(savedView || "compact");
 const projects = [
   {
     name: "栖光之宅 · Astra 室内设计",
