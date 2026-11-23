@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>黄昏之墟 · 项目启动台</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --panel: #161b26;
+    --panel-hover: #1c2331;
+    --border: #2a3242;
+    --text: #e6edf3;
+    --text-dim: #8b96a8;
+    --accent: #f5a623;
+    --accent-2: #e8833a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(245,166,35,.08), transparent),
+      radial-gradient(ellipse 60% 40% at 90% 110%, rgba(232,131,58,.06), transparent);
+  }
+  header {
+    padding: 34px 32px 6px;
+    text-align: center;
+  }
+  header h1 {
+    font-size: 19px;
+    letter-spacing: 8px;
+    font-weight: 400;
+    color: var(--text-dim);
+  }
+  header .sub {
+    margin-top: 8px;
+    color: var(--text-dim);
+    font-size: 13px;
+    letter-spacing: 2px;
+    opacity: .75;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    max-width: 1240px;
+    margin: 30px auto 60px;
+    padding: 0 32px;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+    background: var(--panel-hover);
+  }
+  .thumb {
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 52px;
+    background:
+      linear-gradient(135deg, rgba(245,166,35,.12), rgba(232,131,58,.04)),
+      repeating-linear-gradient(0deg, transparent 0 23px, rgba(255,255,255,.025) 23px 24px),
+      repeating-linear-gradient(90deg, transparent 0 23px, rgba(255,255,255,.025) 23px 24px);
+    border-bottom: 1px solid var(--border);
+  }
+  .body { padding: 16px 18px 14px; flex: 1; display: flex; flex-direction: column; }
+  .body h2 { font-size: 17px; font-weight: 600; }
+  .tags { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag {
+    font-size: 11px;
+    color: var(--accent);
+    border: 1px solid rgba(245,166,35,.35);
+    border-radius: 999px;
+    padding: 2px 9px;
+    background: rgba(245,166,35,.07);
+  }
+  .desc { margin-top: 10px; font-size: 12.5px; line-height: 1.7; color: var(--text-dim); flex: 1; }
+  .actions { margin-top: 14px; display: flex; gap: 8px; }
+  .btn {
+    flex: 1;
+    text-align: center;
+    font-size: 13px;
+    padding: 9px 0;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    color: var(--text);
+    text-decoration: none;
+    cursor: pointer;
+    background: transparent;
+    font-family: inherit;
+    transition: all .15s ease;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn.primary {
+    background: linear-gradient(120deg, #f5a623, #e8833a);
+    border: none;
+    color: #16110a;
+    font-weight: 600;
+  }
+  .btn.primary:hover { filter: brightness(1.1); color: #16110a; }
+  .preview-wrap {
+    display: none;
+    border-top: 1px solid var(--border);
+    background: #000;
+  }
+  .preview-wrap.open { display: block; }
+  .preview-wrap iframe {
+    width: 100%;
+    height: 420px;
+    border: none;
+    background: #000;
+  }
+  footer {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 12px;
+    padding: 0 0 40px;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>黄 昏 之 墟</h1>
+  <div class="sub">灵感收集箱 · 共 8 个</div>
+</header>
+
+<div class="grid" id="grid"></div>
+
+<footer>本地项目的在线入口正在整理</footer>
+
+<script>
+const projects = [
+  {
+    name: "Painted Valley · 彩绘山谷",
+    icon: "🌿",
+    tags: ["漫游", "手绘风格", "网页漫游"],
+    desc: "在手绘动画风格的山谷中漫步，欣赏草地、村庄与远山。网页漫游需要联网。",
+    path: "https://patch.gg/blendi/painted-valley"
+  },
+  {
+    name: "栖居 HABITAT · 家庭 3D 空间",
+    icon: "🏠",
+    tags: ["室内场景", "智能家居"],
+    desc: "可探索的家庭室内三维空间：客厅、卧室、书房、餐厨与卫浴，点选设备控制灯光家电，遮挡墙体自动淡出。",
+    path: "栖居家庭3D空间/index.html"
+  },
+  {
+    name: "DF-01 数字工厂 · 总装车间",
+    icon: "🏭",
+    tags: ["数字孪生", "工业产线"],
+    desc: "数字化总装车间三维场景，展现产线布局与装配流程。",
+    path: "DF-01 数字工厂-总装车间/digital-factory-3d-main/digital-factory-3d.html"
+  },
+  {
+    name: "波音 787 数字孪生",
+    icon: "✈️",
+    tags: ["数字孪生", "航空"],
+    desc: "波音 787 飞机数字孪生展示，交互查看机体结构与系统。",
+    path: "波音787数字孪生/index.html"
+  },
+  {
+    name: "轨道热泵洗烘一体机",
+    icon: "🌀",
+    tags: ["机械展示", "家电"],
+    desc: "轨道式热泵洗烘一体机三维拆解与运行原理演示。",
+    path: "轨道热泵洗烘一体机/index.html"
+  },
+  {
+    name: "机器人蜘蛛 · 八足拆解实验室",
+    icon: "🕷️",
+    tags: ["机械拆解", "机器人"],
+    desc: "八足机械蜘蛛拆解实验室：步态观察、爆炸拆解、单腿检修与透视查看。",
+    path: "机器人蜘蛛八足拆解实验室/index.html"
+  },
+  {
+    name: "智能仓储演示",
+    icon: "📦",
+    tags: ["数字孪生", "仓储物流"],
+    desc: "智能仓储三维演示，呈现库区、货架与物流调度场景。",
+    path: "智能仓储演示/index.html"
+  },
+  {
+    name: "微缩港口",
+    icon: "⚓",
+    tags: ["微缩场景", "港口"],
+    desc: "微缩港口场景：船舶、岸桥与港口设施的低多边形可视化。",
+    path: "微缩港口/index.html"
+  }
+];
+
+const grid = document.getElementById("grid");
+projects.forEach(p => {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `
+    <div class="thumb">${p.icon}</div>
+    <div class="body">
+      <h2>${p.name}</h2>
+      <div class="tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join("")}</div>
+      <div class="desc">${p.desc}</div>
+      <div class="actions">
+        ${p.path.startsWith("https://") ? `<a class="btn primary" href="${encodeURI(p.path)}" target="_blank" rel="noopener">打开原版体验</a>` : `<span class="btn">本地已收集 · 在线入口待补充</span>`}
+        
+      </div>
+    </div>
+    <div class="preview-wrap"><iframe loading="lazy" title="${p.name}"></iframe></div>
+  `;
+  const btn = card.querySelector("button");
+  const wrap = card.querySelector(".preview-wrap");
+  const iframe = card.querySelector("iframe");
+  if (btn) btn.addEventListener("click", () => {
+    const isOpen = wrap.classList.toggle("open");
+    if (isOpen) {
+      if (!iframe.src) iframe.src = btn.dataset.path;
+      btn.textContent = "关闭预览";
+    } else {
+      btn.textContent = "内嵌预览";
+    }
+  });
+  grid.appendChild(card);
+});
+</script>
+</body>
+</html>
+
