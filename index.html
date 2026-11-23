@@ -130,6 +130,20 @@
     padding: 0 0 40px;
     letter-spacing: 1px;
   }
+  @media (max-width: 600px) {
+    header { padding: 22px 12px 0; }
+    header h1 { font-size: 17px; letter-spacing: 5px; }
+    header .sub { font-size: 12px; margin-top: 5px; }
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 18px auto 30px; padding: 0 12px; }
+    .card { border-radius: 10px; min-width: 0; }
+    .thumb { height: 52px; font-size: 28px; }
+    .body { padding: 10px; }
+    .body h2 { font-size: 14px; line-height: 1.35; overflow-wrap: anywhere; }
+    .tags, .desc { display: none; }
+    .actions { margin-top: 9px; }
+    .btn { font-size: 11px; line-height: 1.4; padding: 8px 4px; }
+    footer { padding: 0 12px 24px; font-size: 11px; }
+  }
 </style>
 </head>
 <body>
